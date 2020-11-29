@@ -1,0 +1,19 @@
+{
+  "name": "express-mesto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeoGeorgeous/express-mesto.git"
+  },
+  "author": "George Gorchev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GeoGeorgeous/express-mesto/issues"
+  },
+  "homepage": "https://github.com/GeoGeorgeous/express-mesto#readme"
+}
