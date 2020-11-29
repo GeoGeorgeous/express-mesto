@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/mesto-react/static/css/main.2a25ee56.chunk.css",
-    "main.js": "/mesto-react/static/js/main.b0d7b93b.chunk.js",
-    "main.js.map": "/mesto-react/static/js/main.b0d7b93b.chunk.js.map",
-    "runtime-main.js": "/mesto-react/static/js/runtime-main.24eba18e.js",
-    "runtime-main.js.map": "/mesto-react/static/js/runtime-main.24eba18e.js.map",
-    "static/js/2.e3b94537.chunk.js": "/mesto-react/static/js/2.e3b94537.chunk.js",
-    "static/js/2.e3b94537.chunk.js.map": "/mesto-react/static/js/2.e3b94537.chunk.js.map",
-    "static/js/3.d39934af.chunk.js": "/mesto-react/static/js/3.d39934af.chunk.js",
-    "static/js/3.d39934af.chunk.js.map": "/mesto-react/static/js/3.d39934af.chunk.js.map",
-    "index.html": "/mesto-react/index.html",
-    "static/css/main.2a25ee56.chunk.css.map": "/mesto-react/static/css/main.2a25ee56.chunk.css.map",
-    "static/js/2.e3b94537.chunk.js.LICENSE.txt": "/mesto-react/static/js/2.e3b94537.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/mesto-react/static/media/trash-bin-icon.dd7c53a4.svg",
-    "static/media/logo.2e17206c.svg": "/mesto-react/static/media/logo.2e17206c.svg"
+    "main.css": "./static/css/main.ad6926d0.chunk.css",
+    "main.js": "./static/js/main.b0d7b93b.chunk.js",
+    "main.js.map": "./static/js/main.b0d7b93b.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.3ac7a129.js",
+    "runtime-main.js.map": "./static/js/runtime-main.3ac7a129.js.map",
+    "static/js/2.e3b94537.chunk.js": "./static/js/2.e3b94537.chunk.js",
+    "static/js/2.e3b94537.chunk.js.map": "./static/js/2.e3b94537.chunk.js.map",
+    "static/js/3.d39934af.chunk.js": "./static/js/3.d39934af.chunk.js",
+    "static/js/3.d39934af.chunk.js.map": "./static/js/3.d39934af.chunk.js.map",
+    "index.html": "./index.html",
+    "static/css/main.ad6926d0.chunk.css.map": "./static/css/main.ad6926d0.chunk.css.map",
+    "static/js/2.e3b94537.chunk.js.LICENSE.txt": "./static/js/2.e3b94537.chunk.js.LICENSE.txt",
+    "static/media/index.css": "./static/media/trash-bin-icon.dd7c53a4.svg",
+    "static/media/logo.2e17206c.svg": "./static/media/logo.2e17206c.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.24eba18e.js",
+    "static/js/runtime-main.3ac7a129.js",
     "static/js/2.e3b94537.chunk.js",
-    "static/css/main.2a25ee56.chunk.css",
+    "static/css/main.ad6926d0.chunk.css",
     "static/js/main.b0d7b93b.chunk.js"
   ]
 }
