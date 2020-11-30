@@ -19,6 +19,7 @@ module.exports = {
     'react',
   ],
   rules: {
-    'no-underscore-dangle': ['warb', '_id'],
+    'no-console': 'off',
+    'no-underscore-dangle': ['warn', { allow: ['_id'] }],
   },
 };

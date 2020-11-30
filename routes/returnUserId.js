@@ -1,13 +1,26 @@
 const returnUsers = require('express').Router();
-const users  = require('../data/users');
+const fsPromises = require('fs').promises;
+const path = require('path');
+
+const filePath = path.join(__dirname, '/../data/usejrs.json');
 
 returnUsers.get('/users/:id', (req, res) => {
-  if (!users[req.params.id]) {
-    res.send({ error: 'Такого пользователя нет' } )
-    return
-  }
+  const requestedId = req.params.id; // Запрашиваемый ID;
 
-  res.send(users[req.params.id]);
+  fsPromises.readFile(filePath, { encoding: 'utf8' }) // Чтение файла
+    .then((data) => {
+      const users = JSON.parse(data); // Массив объектов пользователей
+      const selectedUser = users.find((user) => (user._id === requestedId));
+      /* eslint-disable no-unused-expressions */
+      selectedUser
+        ? res.send(JSON.stringify(selectedUser))
+          .sendStatus(200) // Отправляем 200
+        : res.send(JSON.stringify({ message: 'Нет пользователя с таким id' }))
+          .sendStatus(404); // Отправляем 404
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 module.exports = returnUsers;
