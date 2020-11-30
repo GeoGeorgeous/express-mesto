@@ -18,11 +18,10 @@ app.use('/', returnCards);
 app.use('/', returnUserId);
 app.get('*', (req, res) => {
   res.status('404');
-  res.send({ message: 'Запрашиваемый ресурс не найден' });
+  res.json({ message: 'Запрашиваемый ресурс не найден' });
 });
 
 // Run App:
-
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
