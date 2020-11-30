@@ -13,10 +13,8 @@ returnUsers.get('/users/:id', (req, res) => {
       const selectedUser = users.find((user) => (user._id === requestedId));
       /* eslint-disable no-unused-expressions */
       selectedUser
-        ? res.json(selectedUser)
-          .sendStatus(200) // Отправляем 200
-        : res.json({ message: 'Нет пользователя с таким id' })
-          .sendStatus(404); // Отправляем 404
+        ? res.status(200).json(selectedUser)
+        : res.status(404).json({ message: 'Нет пользователя с таким id' });
     })
     .catch((err) => {
       console.log(err);

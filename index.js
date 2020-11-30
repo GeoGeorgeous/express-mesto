@@ -17,8 +17,7 @@ app.use('/', returnUsers);
 app.use('/', returnCards);
 app.use('/', returnUserId);
 app.get('*', (req, res) => {
-  res.status('404');
-  res.json({ message: 'Запрашиваемый ресурс не найден' });
+  res.status('404').json({ message: 'Запрашиваемый ресурс не найден' });
 });
 
 // Run App:

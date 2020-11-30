@@ -8,8 +8,7 @@ returnCards.get('/cards', (req, res) => {
   fsPromises.readFile(filePath, { encoding: 'utf8' }) // Чтение файла
     .then((data) => {
       const cards = JSON.parse(data);
-      res.json(cards)
-        .sendStatus(200);
+      res.status(200).json(cards);
     })
     .catch((err) => {
       console.log(err);

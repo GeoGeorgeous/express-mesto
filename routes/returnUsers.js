@@ -8,8 +8,7 @@ returnUsers.get('/users', (req, res) => {
   fsPromises.readFile(filePath, { encoding: 'utf8' }) // Чтение файла
     .then((data) => {
       const users = JSON.parse(data);
-      res.json(users)
-        .sendStatus(200);
+      res.status(200).json(users);
     })
     .catch((err) => {
       console.log(err);
