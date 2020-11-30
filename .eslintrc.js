@@ -19,6 +19,6 @@ module.exports = {
     'react',
   ],
   rules: {
-    "allow": ["_id"]
+    'no-underscore-dangle': ['warb', '_id'],
   },
 };

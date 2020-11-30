@@ -1,16 +1,28 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const returnUsers = require('./returnUsers');
+const returnCards = require('./returnCards');
+const returnUserId = require('./returnUserId');
+
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.use(express.static(__dirname + '/public')); // static
+app.use(express.static(`${__dirname}/public`)); // static
+
+app.use(bodyParser.urlencoded({ extended: true })); // body-parse
+
+// Routing:
+app.use('/', returnUsers);
+app.use('/', returnCards);
+app.use('/', returnUserId);
+app.get('*', (req, res) => {
+  res.send({ "message": "Запрашиваемый ресурс не найден" })
+});
 
 
-app.get('/', (req, res) => {
-  
-})
+// Run App:
 
 app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}`)
-})
-
+  console.log(`App listening on port ${PORT}`);
+});
