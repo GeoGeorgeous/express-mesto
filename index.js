@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const returnUsers = require('./returnUsers');
-const returnCards = require('./returnCards');
-const returnUserId = require('./returnUserId');
+const returnUsers = require('./routes/returnUsers');
+const returnCards = require('./routes/returnCards');
+const returnUserId = require('./routes/returnUserId');
 
 const { PORT = 3000 } = process.env;
 
