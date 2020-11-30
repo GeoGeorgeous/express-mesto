@@ -2,7 +2,7 @@ const returnUsers = require('express').Router();
 const fsPromises = require('fs').promises;
 const path = require('path');
 
-const filePath = path.join(__dirname, '/../data/usejrs.json');
+const filePath = path.join(__dirname, '/../data/users.json');
 
 returnUsers.get('/users/:id', (req, res) => {
   const requestedId = req.params.id; // Запрашиваемый ID;
@@ -13,9 +13,9 @@ returnUsers.get('/users/:id', (req, res) => {
       const selectedUser = users.find((user) => (user._id === requestedId));
       /* eslint-disable no-unused-expressions */
       selectedUser
-        ? res.send(JSON.stringify(selectedUser))
+        ? res.json(selectedUser)
           .sendStatus(200) // Отправляем 200
-        : res.send(JSON.stringify({ message: 'Нет пользователя с таким id' }))
+        : res.json({ message: 'Нет пользователя с таким id' })
           .sendStatus(404); // Отправляем 404
     })
     .catch((err) => {
