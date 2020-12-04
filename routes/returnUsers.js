@@ -11,6 +11,7 @@ returnUsers.get('/users', (req, res) => {
       res.status(200).json(users);
     })
     .catch((err) => {
+      res.status(500);
       console.log(err);
     });
 });

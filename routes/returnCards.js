@@ -11,6 +11,7 @@ returnCards.get('/cards', (req, res) => {
       res.status(200).json(cards);
     })
     .catch((err) => {
+      res.status(500);
       console.log(err);
     });
 });

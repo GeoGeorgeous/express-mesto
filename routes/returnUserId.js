@@ -17,6 +17,7 @@ returnUsers.get('/users/:id', (req, res) => {
         : res.status(404).json({ message: 'Нет пользователя с таким id' });
     })
     .catch((err) => {
+      res.status(500);
       console.log(err);
     });
 });
