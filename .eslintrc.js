@@ -16,6 +16,7 @@ module.exports = {
   },
   rules: {
     'no-console': 'off',
+    'allowTernary': 'true',
     'no-underscore-dangle': ['warn', { allow: ['_id'] }],
   },
 };
