@@ -1,11 +1,11 @@
 const returnUsers = require('express').Router();
-const fsPromises = require('fs').promises;
 const path = require('path');
+const readFile = require('../utils/readFile.js');
 
 const filePath = path.join(__dirname, '/../data/users.json');
 
 returnUsers.get('/users', (req, res) => {
-  fsPromises.readFile(filePath, { encoding: 'utf8' }) // Чтение файла
+  readFile(filePath) // Чтение файла
     .then((data) => {
       const users = JSON.parse(data);
       res.status(200).json(users);

@@ -1,13 +1,13 @@
 const returnUsers = require('express').Router();
-const fsPromises = require('fs').promises;
 const path = require('path');
+const readFile = require('../utils/readFile.js');
 
 const filePath = path.join(__dirname, '/../data/users.json');
 
 returnUsers.get('/users/:id', (req, res) => {
   const requestedId = req.params.id; // Запрашиваемый ID;
 
-  fsPromises.readFile(filePath, { encoding: 'utf8' }) // Чтение файла
+  readFile(filePath) // Чтение файла
     .then((data) => {
       const users = JSON.parse(data); // Массив объектов пользователей
       const selectedUser = users.find((user) => (user._id === requestedId));
