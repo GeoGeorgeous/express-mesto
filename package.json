@@ -1,7 +1,7 @@
 {
   "name": "express-mesto",
   "version": "1.0.0",
-  "description": "",
+  "description": "backend for mesto powered by express (node.js)",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
