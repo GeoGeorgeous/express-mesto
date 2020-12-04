@@ -11,10 +11,11 @@ returnUsers.get('/users/:id', (req, res) => {
     .then((data) => {
       const users = JSON.parse(data); // Массив объектов пользователей
       const selectedUser = users.find((user) => (user._id === requestedId));
-      /* eslint-disable no-unused-expressions */
-      selectedUser
-        ? res.status(200).json(selectedUser)
-        : res.status(404).json({ message: 'Нет пользователя с таким id' });
+      if (selectedUser) {
+        res.status(200).json(selectedUser);
+      } else {
+        res.status(404).json({ message: 'Нет пользователя с таким id' });
+      }
     })
     .catch((err) => {
       res.status(500);
