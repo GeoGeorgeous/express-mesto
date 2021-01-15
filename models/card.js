@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const urlRegExp = require('../utils/regExp');
 
 // name — имя карточки, строка от 2 до 30 символов, обязательное поле;
 // link — ссылка на картинку, строка, обязательно поле. Для проверки данных используйте регулярное выражение из предыдущей схемы;
@@ -15,8 +16,13 @@ const cardSchema = new mongoose.Schema({
   },
   link: {
     type: String,
-    required: true
-    // добавить регулярку сюда
+    required: true,
+    validate: {
+      validator(url) {
+          return urlRegExp.test(url);
+      },
+      message: 'URL адрес для изображения указан некорректно.'
+    }
   },
   owner: {
     type: ObjectId,

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-
-const regex = new RegExp(/^(https?:\/\/)?(w{3}.)?+([a-z\d]{0,}).([a-z\d]{2,})+([a-z0-9-._~:\/?#[\\\]@!\$&'()*+,;=]{1,})/gi)
+const urlRegExp = require('../utils/regExp');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -19,11 +18,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator(url) {
-          return regex.test(url);
+          return urlRegExp.test(url);
       },
-      message: 'URL адрес для изображения указан некорректно.',
-  }
-    // добавить регулярку сюда
+      message: 'URL адрес для изображения указан некорректно.'
+    }
   }
 });
 
