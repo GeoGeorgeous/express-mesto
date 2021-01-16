@@ -1,4 +1,5 @@
 const Card = require('../models/card.js');
+const handleError = require('../utils/handleError');
 
 // GET Возвращает все карточки
 const getCards = (req, res) => {
@@ -6,7 +7,7 @@ const getCards = (req, res) => {
     .then((cards) => {
       res.status(200).send(cards);
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => handleError(err, res, 'карточку'));
 };
 
 // POST Создаёт карточку
@@ -18,9 +19,11 @@ const createCard = (req, res) => {
   Card.create({
     name, link, owner, likes, createdAt,
   })
-    .then((card) => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .then((card) => res.status(200).send({ data: card }))
+    .catch((err) => handleError(err, res, 'карточку'));
 };
+
+// ValidationError
 
 // GET Удаляет карточку по id
 const deleteCard = (req, res) => {
@@ -28,7 +31,7 @@ const deleteCard = (req, res) => {
   const requestedId = req.params.id; // Запрашиваемый ID;
   Card.findByIdAndRemove(requestedId)
     .then(() => res.send({ message: `Карточка ${requestedId} удалена` }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => handleError(err, res, 'карточку'));
 };
 
 module.exports = { getCards, createCard, deleteCard };

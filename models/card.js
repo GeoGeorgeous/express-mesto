@@ -1,4 +1,3 @@
-/* eslint-disable */
 const mongoose = require('mongoose');
 const urlRegExp = require('../utils/regExp'); // Регулярное выражение для проверки URL
 
@@ -7,22 +6,22 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30
+    maxlength: 30,
   },
   link: { // Ссылка на картинку
     type: String,
     required: true,
     validate: {
       validator(url) {
-          return true;
+        return urlRegExp.test(url);
       },
-      message: 'URL адрес для изображения указан некорректно.'
-    }
+      message: 'URL адрес для изображения указан некорректно.',
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
-    required: true
+    required: true,
   },
   likes: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -32,8 +31,8 @@ const cardSchema = new mongoose.Schema({
   }],
   createdAt: {
     type: Date,
-    default: Date.now()
-  }
+    default: Date.now(),
+  },
 });
 
 module.exports = mongoose.model('card', cardSchema);

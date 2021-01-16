@@ -1,4 +1,5 @@
 const User = require('../models/user.js');
+const handleError = require('../utils/handleError');
 
 // GET Возвращает всех польователей
 const getUsers = (req, res) => {
@@ -6,7 +7,7 @@ const getUsers = (req, res) => {
     .then((users) => {
       res.status(200).send(users);
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => handleError(err, res, 'пользователя'));
 };
 
 // GET Возвращает пользователя по _id
@@ -16,9 +17,7 @@ const getUsersById = (req, res) => {
     .then((user) => {
       res.status(200).send(user);
     })
-    .catch(() => {
-      res.status(404).json({ message: 'Нет пользователя с таким id' });
-    });
+    .catch((err) => handleError(err, res, 'пользователя с таким id. Возможно, его не существует'));
 };
 
 // POST Создаёт пользователя
@@ -26,7 +25,7 @@ const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => handleError(err, res, 'пользователя'));
 };
 
 module.exports = { getUsers, getUsersById, createUser };
