@@ -23,15 +23,38 @@ const createCard = (req, res) => {
     .catch((err) => handleError(err, res, 'карточку'));
 };
 
-// ValidationError
-
 // GET Удаляет карточку по id
 const deleteCard = (req, res) => {
-  console.log(req.params.id);
   const requestedId = req.params.id; // Запрашиваемый ID;
   Card.findByIdAndRemove(requestedId)
     .then(() => res.send({ message: `Карточка ${requestedId} удалена` }))
     .catch((err) => handleError(err, res, 'карточку'));
 };
 
-module.exports = { getCards, createCard, deleteCard };
+// PUT Добавляет лайк карточке по идентификатору карточки
+const addLike = (req, res) => {
+  const requestedId = req.params.id; // Запрашиваемый ID;
+  Card.findByIdAndUpdate(
+    requestedId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true },
+  )
+    .then((likedCard) => res.send({ data: likedCard }))
+    .catch((err) => handleError(err, res, 'карточку'));
+};
+
+// DELETE Удаляет лайк карточки по идентификатору карточки
+const removeLike = (req, res) => {
+  const requestedId = req.params.id; // Запрашиваемый ID;
+  Card.findByIdAndUpdate(
+    requestedId,
+    { $pull: { likes: req.user._id } },
+    { new: true },
+  )
+    .then((likedCard) => res.send({ data: likedCard }))
+    .catch((err) => handleError(err, res, 'карточку'));
+};
+
+module.exports = {
+  getCards, createCard, deleteCard, addLike, removeLike,
+};
