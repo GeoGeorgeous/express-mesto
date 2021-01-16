@@ -15,7 +15,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', { // Подключени�
 });
 
 app.use(bodyParser.json()); // для собирания JSON-формата
-app.use(express.static(`${__dirname}/public`)); // Раздача Статики
 
 // Авторизация (hard-coded)
 app.use((req, res, next) => {

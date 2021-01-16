@@ -22,10 +22,12 @@ const createCard = (req, res) => {
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
+// GET Удаляет карточку по id
 const deleteCard = (req, res) => {
+  console.log(req.params.id);
   const requestedId = req.params.id; // Запрашиваемый ID;
   Card.findByIdAndRemove(requestedId)
-    .then((card) => res.send({ data: card }))
+    .then(() => res.send({ message: `Карточка ${requestedId} удалена` }))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
