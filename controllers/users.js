@@ -2,7 +2,7 @@ const User = require('../models/user.js');
 
 // GET Возвращает всех польователей
 const getUsers = (req, res) => {
-  User.find({}) // Чтение файла
+  User.find({})
     .then((users) => {
       res.status(200).send(users);
     })
@@ -12,7 +12,7 @@ const getUsers = (req, res) => {
 // GET Возвращает пользователя по _id
 const getUsersById = (req, res) => {
   const requestedId = req.params.id; // Запрашиваемый ID;
-  User.findById(requestedId) // Чтение файла
+  User.findById(requestedId)
     .then((user) => {
       res.status(200).send(user);
     })

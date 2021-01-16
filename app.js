@@ -14,14 +14,10 @@ mongoose.connect('mongodb://localhost:27017/mestodb', { // Подключени�
 });
 
 app.use(bodyParser.json()); // для собирания JSON-формата
-// app.use(bodyParser.urlencoded({ extended: true })); // для приёма веб-страниц внутри POST-запроса
 app.use(express.static(`${__dirname}/public`)); // Раздача Статики
 
 // Роутинг:
 app.use('/', userRouter);
-// app.use('/', returnUsers);
-// app.use('/', returnCards);
-// app.use('/', returnUserId);
 app.get('*', (req, res) => { // 404
   res.status('404').json({ message: 'Запрашиваемый ресурс не найден' });
 });
