@@ -19,7 +19,7 @@ const createCard = (req, res) => {
   Card.create({
     name, link, owner, likes, createdAt,
   })
-    .then((card) => res.status(200).send({ data: card }))
+    .then((newCard) => res.status(200).send({ data: newCard }))
     .catch((err) => handleError(err, res, 'карточку'));
 };
 
@@ -39,7 +39,7 @@ const addLike = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .then((likedCard) => res.send({ data: likedCard }))
+    .then((updatedCard) => res.send({ data: updatedCard }))
     .catch((err) => handleError(err, res, 'карточку'));
 };
 
@@ -51,7 +51,7 @@ const removeLike = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .then((likedCard) => res.send({ data: likedCard }))
+    .then((updatedCard) => res.send({ data: updatedCard }))
     .catch((err) => handleError(err, res, 'карточку'));
 };
 

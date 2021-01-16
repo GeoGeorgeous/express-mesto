@@ -11,10 +11,10 @@ mongoose.connect('mongodb://localhost:27017/mestodb', { // Подключени�
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
-  useUnifiedTopology: true, // для new Server Discover и Monitoring engine
+  useUnifiedTopology: true,
 });
 
-app.use(bodyParser.json()); // для собирания JSON-формата
+app.use(bodyParser.json()); // JSON
 
 // Авторизация (hard-coded)
 app.use((req, res, next) => {

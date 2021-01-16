@@ -15,21 +15,21 @@ const cardSchema = new mongoose.Schema({
       validator(url) {
         return urlRegExp.test(url);
       },
-      message: 'URL адрес для изображения указан некорректно.',
+      message: 'URL адрес для изображения карточки указан некорректно.',
     },
   },
-  owner: {
+  owner: { // Владелец карточки
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true,
   },
-  likes: [{
+  likes: [{ // Массив лайков
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: false,
     default: [],
   }],
-  createdAt: {
+  createdAt: { // Дата создания
     type: Date,
     default: Date.now(),
   },

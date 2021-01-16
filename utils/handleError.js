@@ -1,5 +1,9 @@
 module.exports = function handleCheck(err, res, env) {
   // Функция возвращает res с кодом и текстом ошибки и отправляет его.
+  // Принимает:
+  //    Объект ошибки;
+  //    Объект респонса;
+  //    EVN — строку с контекстом для вывода ошибки.
   let ERROR_CODE;
   let ERROR_MESSAGE;
   console.log(err);
