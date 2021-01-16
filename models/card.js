@@ -1,20 +1,14 @@
 const mongoose = require('mongoose');
 const urlRegExp = require('../utils/regExp'); // Регулярное выражение для проверки URL
 
-// name — имя карточки, строка от 2 до 30 символов, обязательное поле;
-// link — ссылка на картинку, строка, обязательно поле. Для проверки данных используйте регулярное выражение из предыдущей схемы;
-// owner — ссылка на модель автора карточки, тип ObjectId, обязательное поле;
-// likes — список лайкнувших пост пользователей, массив ObjectId, по умолчанию — пустой массив (поле default);
-// createdAt — дата создания, тип Date, значение по умолчанию Date.now.
-
 const cardSchema = new mongoose.Schema({
-  name: {
+  name: { // Название карточки
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30,
+    maxlength: 30
   },
-  link: {
+  link: { // Ссылка на картинку
     type: String,
     required: true,
     validate: {
@@ -25,12 +19,18 @@ const cardSchema = new mongoose.Schema({
     }
   },
   owner: {
-    type: ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
     required: true
-    // добавить регулярку сюда
   },
-  likes: {},
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: false,
+    default: [],
+  }],
   createdAt: {
     type: Date,
+    default: Date.now()
   }
 });
