@@ -1,26 +1,28 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const returnUsers = require('./routes/returnUsers');
-const returnCards = require('./routes/returnCards');
-const returnUserId = require('./routes/returnUserId');
+const bodyParser = require('body-parser');
+const userRouter = require('./routes/userRouter');
 
 const { PORT = 3000 } = process.env;
-
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
+mongoose.connect('mongodb://localhost:27017/mestodb', { // Подключение БД
   useNewUrlParser: true,
   useCreateIndex: true,
-    useFindAndModify: false
+  useFindAndModify: false,
+  useUnifiedTopology: true, // для new Server Discover и Monitoring engine
 });
 
-app.use(express.static(`${__dirname}/public`)); // static
+app.use(bodyParser.json()); // для собирания JSON-формата
+// app.use(bodyParser.urlencoded({ extended: true })); // для приёма веб-страниц внутри POST-запроса
+app.use(express.static(`${__dirname}/public`)); // Раздача Статики
 
-// Routing:
-app.use('/', returnUsers);
-app.use('/', returnCards);
-app.use('/', returnUserId);
-app.get('*', (req, res) => {
+// Роутинг:
+app.use('/', userRouter);
+// app.use('/', returnUsers);
+// app.use('/', returnCards);
+// app.use('/', returnUserId);
+app.get('*', (req, res) => { // 404
   res.status('404').json({ message: 'Запрашиваемый ресурс не найден' });
 });
 
