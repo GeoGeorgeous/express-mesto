@@ -6,7 +6,6 @@ module.exports = function handleCheck(err, res, env) {
   //    EVN — строку с контекстом для вывода ошибки.
   let ERROR_CODE;
   let ERROR_MESSAGE;
-  console.log(err);
   if (err.name.includes('ValidationError')) {
     ERROR_CODE = 400;
     ERROR_MESSAGE = { message: `Не удалось добавить ${env}. Переданы некорректные данные.` };
