@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const urlRegExp = require('../utils/regExp');
+const urlRegExp = require('../utils/regExp'); // Регулярное выражение для проверки URL
 
 // name — имя карточки, строка от 2 до 30 символов, обязательное поле;
 // link — ссылка на картинку, строка, обязательно поле. Для проверки данных используйте регулярное выражение из предыдущей схемы;
