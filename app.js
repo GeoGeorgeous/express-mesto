@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/userRouter');
+const cardRouter = require('./routes/cardRouter');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -21,13 +22,13 @@ app.use((req, res, next) => {
   req.user = {
     _id: '60030e62c1a9332e25ef3755',
   };
-
-  next();
+  next(); // Добавили в каждый req объект user
 });
 
 // Роутинг:
-app.use('/', userRouter);
-app.get('*', (req, res) => { // 404
+app.use('/', userRouter); // Роутинг пользователей
+app.use('/', cardRouter); // Роутинг карточек
+app.get('*', (req, res) => { // Роутинг 404
   res.status('404').json({ message: 'Запрашиваемый ресурс не найден' });
 });
 
