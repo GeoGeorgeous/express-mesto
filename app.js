@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 // Роутинг:
 app.use('/', userRouter); // Роутинг пользователей
 app.use('/', cardRouter); // Роутинг карточек
-app.get('*', (req, res) => { // Роутинг 404
+app.use('*', (req, res) => { // Роутинг 404
   res.status('404').json({ message: 'Запрашиваемый ресурс не найден' });
 });
 

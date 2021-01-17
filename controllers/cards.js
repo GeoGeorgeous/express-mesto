@@ -4,6 +4,7 @@ const handleError = require('../utils/handleError');
 // GET Возвращает все карточки
 const getCards = (req, res) => {
   Card.find({})
+    .orFail()
     .then((cards) => {
       res.status(200).send(cards);
     })
@@ -27,6 +28,7 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   const requestedId = req.params.id; // Запрашиваемый ID;
   Card.findByIdAndRemove(requestedId)
+    .orFail()
     .then(() => res.send({ message: `Карточка ${requestedId} удалена` }))
     .catch((err) => handleError(err, res, 'карточку'));
 };
@@ -37,8 +39,9 @@ const addLike = (req, res) => {
   Card.findByIdAndUpdate(
     requestedId,
     { $addToSet: { likes: req.user._id } },
-    { new: true },
+    { new: true, runValidators: true },
   )
+    .orFail()
     .then((updatedCard) => res.send({ data: updatedCard }))
     .catch((err) => handleError(err, res, 'карточку'));
 };
@@ -49,8 +52,9 @@ const removeLike = (req, res) => {
   Card.findByIdAndUpdate(
     requestedId,
     { $pull: { likes: req.user._id } },
-    { new: true },
+    { new: true, runValidators: true },
   )
+    .orFail()
     .then((updatedCard) => res.send({ data: updatedCard }))
     .catch((err) => handleError(err, res, 'карточку'));
 };
