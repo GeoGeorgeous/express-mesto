@@ -2,7 +2,7 @@
 
 Backend Mesto на Node.js (Express).
 
-##### Скрипты:
+#### Скрипты:
 Для запуска сервера на **localhost:3000** 
 `npm run start`
 
@@ -15,5 +15,9 @@ Backend Mesto на Node.js (Express).
 Исправление ошибок ESLint:
 `npm run lint:fix`
 
+#### Todo:
+* Добавить инструкцию по роутингу
+* Добавить инструкцию по HTTP запросам
+* Рассказать про используемые технологии
 
 
