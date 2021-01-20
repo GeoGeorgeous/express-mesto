@@ -15,14 +15,13 @@ const getUsersById = (req, res) => {
   User.findById(requestedId)
     .orFail()
     .then((user) => { res.status(200).send(user); })
-    .catch((err) => handleError(err, res, 'пользователя с таким id. Возможно, его не существует'));
+    .catch((err) => handleError(err, res, 'пользователя с таким id. Возможно, его'));
 };
 
 // POST Создаёт пользователя
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .orFail()
     .then((newUser) => res.send({ data: newUser }))
     .catch((err) => handleError(err, res, 'пользователя'));
 };

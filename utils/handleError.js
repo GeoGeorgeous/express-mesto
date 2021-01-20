@@ -1,33 +1,42 @@
 module.exports = function handleCheck(err, res, env) {
-  // Функция возвращает res с кодом и текстом ошибки и отправляет его.
+  // Фильтрует и отправляет ошибки.
   // Принимает:
   //    Объект ошибки;
   //    Объект респонса;
   //    EVN — строку с контекстом для вывода ошибки.
 
-  const logger = () => {
-    console.log(new Date(Date.now()).toString());
-    console.error(err.name);
-    console.error(err.message);
+  const errors = {
+    ValidationError: {
+      message: { message: `Не удалось модифицировать ${env}. Переданы некорректные данные. Подробно: ${err.message}` },
+      code: 400,
+    },
+    CastError: {
+      message: { message: `Не удалось найти ${env} не существует` },
+      code: 400,
+    },
+    DocumentNotFoundError: {
+      message: { message: `Не удалось найти ${env} не существует` },
+      code: 404,
+    },
+    ServerBad: {
+      message: { message: 'Произошла ошибка сервера.' },
+      code: 500,
+    },
   };
 
-  let ERROR_CODE;
-  let ERROR_MESSAGE;
-  if (err.name.includes('ValidationError')) {
-    ERROR_CODE = 400;
-    ERROR_MESSAGE = { message: `Не удалось модифицировать ${env}. Переданы некорректные данные. ${err.message}` };
-    logger();
-  } else if (
-    err.name.includes('CastError')
-      || err.name.includes('DocumentNotFoundError')) {
-    ERROR_CODE = 404;
-    ERROR_MESSAGE = { message: `Не удалось найти ${env}. Возможно, её не существует` };
+  const logger = () => {
+    console.log('');
+    console.log(' !  Произошла ошибка с БД:');
+    console.log(`||| Когда: ${new Date(Date.now()).toString()}`);
+    console.error(`||| Ошибка: ${err.name}`);
+    console.error(`||| Сообщение: ${err.message}`);
+  };
+
+  if (err.name in errors) {
+    res.status(errors[err.name].code).send(errors[err.name].message);
     logger();
   } else {
-    ERROR_CODE = 500;
-    ERROR_MESSAGE = { message: 'Произошла ошибка сервера.' };
+    res.status(errors.ServerBad.code).send(errors.ServerBad.message);
     logger();
   }
-
-  return (res.status(ERROR_CODE).send(ERROR_MESSAGE));
 };

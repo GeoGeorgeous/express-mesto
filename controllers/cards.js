@@ -30,7 +30,7 @@ const deleteCard = (req, res) => {
   Card.findByIdAndRemove(requestedId)
     .orFail()
     .then(() => res.send({ message: `Карточка ${requestedId} удалена` }))
-    .catch((err) => handleError(err, res, 'карточку'));
+    .catch((err) => handleError(err, res, 'карточку. Возможно, её'));
 };
 
 // PUT Добавляет лайк карточке по идентификатору карточки
@@ -43,7 +43,7 @@ const addLike = (req, res) => {
   )
     .orFail()
     .then((updatedCard) => res.send({ data: updatedCard }))
-    .catch((err) => handleError(err, res, 'карточку'));
+    .catch((err) => handleError(err, res, 'карточку. Возможно, её'));
 };
 
 // DELETE Удаляет лайк карточки по идентификатору карточки
@@ -56,7 +56,7 @@ const removeLike = (req, res) => {
   )
     .orFail()
     .then((updatedCard) => res.send({ data: updatedCard }))
-    .catch((err) => handleError(err, res, 'карточку'));
+    .catch((err) => handleError(err, res, 'карточку. Возможно, её'));
 };
 
 module.exports = {
