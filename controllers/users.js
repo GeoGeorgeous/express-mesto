@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const bcrypt = require('bcryptjs');
 const User = require('../models/user.js');
 const handleError = require('../utils/handleError');
@@ -19,6 +20,7 @@ const getUsersById = (req, res) => {
     .catch((err) => handleError(err, res, 'пользователя с таким id. Возможно, его'));
 };
 
+// POST Создаёт пользователя
 const createUser = (req, res) => {
   // хешируем пароль
   bcrypt.hash(req.body.password, 10)
@@ -43,23 +45,34 @@ const createUser = (req, res) => {
     });
 };
 
-// // POST Создаёт пользователя
-// const createUser = (req, res) => {
-//   bcrypt.hash(req.body.password, 10) // password hash
-//     .then((hash) => {
-//       User.create({
-//         email: req.body.email,
-//         password: hash,
-//         // name: req.body.name,
-//         // about: req.body.about,
-//         // avatar: req.body.avatar,
-//       })
-//         .then((newUser) => res.send({ data: newUser }))
-//         .catch((err) => res.send(err));
-//     })
-//     .then((newUser) => res.send({ data: newUser }))
-//     .catch((err) => res.send(err));
-// };
+// Получает из запроса почту и пароль и проверяет их.
+// Если почта и пароль правильные, контроллер создаёт JWT сроком на неделю.
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+
+      return bcrypt.compare(password, user.password);
+    })
+    .then((matched) => {
+      if (!matched) {
+        // хеши не совпали — отклоняем промис
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+
+      // аутентификация успешна
+      res.send({ message: 'Всё верно!' });
+    })
+    .catch((err) => {
+      res
+        .status(401)
+        .send({ message: err.message });
+    });
+};
 
 // PATCH Обновляет данные пользователя:
 const updateUser = (req, res) => {
@@ -80,5 +93,5 @@ const updateUserAvatar = (req, res) => {
 };
 
 module.exports = {
-  getUsers, getUsersById, createUser, updateUser, updateUserAvatar,
+  getUsers, getUsersById, createUser, updateUser, updateUserAvatar, login,
 };
