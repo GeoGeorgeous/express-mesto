@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./utils/errors/NotFoundError');
 const errorHandler = require('./middlewares/errorHandler');
@@ -30,6 +31,7 @@ app.use('*', () => { // Роутинг 404
 });
 
 // Обработка ошибок:
+app.use(errors());
 app.use(errorHandler);
 
 // Run App:
