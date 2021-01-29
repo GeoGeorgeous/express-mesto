@@ -14,11 +14,24 @@ const getUsers = (req, res) => {
 
 // GET Возвращает пользователя по _id
 const getUsersById = (req, res) => {
-  const requestedId = req.params.id; // Запрашиваемый ID;
+  let requestedId = req.params.id; // Запрашиваемый ID;
+  if (requestedId === 'me') { // Возвращает информацию о текущем пользователе
+    requestedId = req.user._id;
+  }
+
   User.findById(requestedId)
     .orFail()
     .then((user) => { res.status(200).send(user); })
-    .catch((err) => handleError(err, res, 'пользователя с таким id. Возможно, его'));
+    .catch((err) => handleError(err, res, 'иъ с таким id. Возможно, его'));
+};
+
+// GET Возвращает информацию о текущем пользователе
+const getCurrentUser = (req, res) => {
+  const requestedId = req.user.id; // Запрашиваемый ID;
+  User.findById(requestedId)
+    .orFail()
+    .then((user) => { res.status(200).send(user); })
+    .catch((err) => handleError(err, res, 'вас с таким id. Возможно, его'));
 };
 
 // POST Создаёт пользователя
@@ -88,5 +101,5 @@ const updateUserAvatar = (req, res) => {
 };
 
 module.exports = {
-  getUsers, getUsersById, createUser, updateUser, updateUserAvatar, login,
+  getUsers, getUsersById, createUser, updateUser, updateUserAvatar, login, getCurrentUser,
 };
