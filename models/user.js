@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    validate: [isEmail, 'Неправильно указан email'],
+    validate: [isEmail, { message: 'Email указан не верно.' }],
   },
   password: { // Пароль пользователя
     type: String,
