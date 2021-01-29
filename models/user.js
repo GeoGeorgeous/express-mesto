@@ -1,4 +1,4 @@
-import { isEmail } from 'validator';
+const { isEmail } = require('validator');
 
 const mongoose = require('mongoose'); // Валидтор для Email
 const urlRegExp = require('../utils/regExp'); // Регулярное выражение для проверки URL

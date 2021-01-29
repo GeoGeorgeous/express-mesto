@@ -19,20 +19,47 @@ const getUsersById = (req, res) => {
     .catch((err) => handleError(err, res, 'пользователя с таким id. Возможно, его'));
 };
 
-// POST Создаёт пользователя
 const createUser = (req, res) => {
-  const {
-    email, name, about, avatar,
-  } = req.body;
-  bcrypt.hash(req.body.password, 10) // password hash
-    .then((hash) => {
-      User.create({
-        email, hash, name, about, avatar,
+  // хешируем пароль
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => User.create({
+      email: req.body.email,
+      password: hash,
+      name: req.body.name,
+      about: req.body.about,
+      avatar: req.body.avatar, // записываем хеш в базу
+    }))
+    .then((user) => {
+      res.status(201).send({
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
       });
     })
-    .then((newUser) => res.send({ data: newUser }))
-    .catch((err) => handleError(err, res, 'пользователя'));
+    .catch((err) => {
+      res.status(400).send(err);
+    });
 };
+
+// // POST Создаёт пользователя
+// const createUser = (req, res) => {
+//   bcrypt.hash(req.body.password, 10) // password hash
+//     .then((hash) => {
+//       User.create({
+//         email: req.body.email,
+//         password: hash,
+//         // name: req.body.name,
+//         // about: req.body.about,
+//         // avatar: req.body.avatar,
+//       })
+//         .then((newUser) => res.send({ data: newUser }))
+//         .catch((err) => res.send(err));
+//     })
+//     .then((newUser) => res.send({ data: newUser }))
+//     .catch((err) => res.send(err));
+// };
 
 // PATCH Обновляет данные пользователя:
 const updateUser = (req, res) => {
