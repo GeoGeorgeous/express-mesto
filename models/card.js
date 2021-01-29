@@ -4,7 +4,7 @@ const urlRegExp = require('../utils/regExp'); // Регулярное выраж
 const cardSchema = new mongoose.Schema({
   name: { // Название карточки
     type: String,
-    required: true,
+    required: [true, 'Поле name обязательное'],
     minlength: 2,
     maxlength: 30,
   },

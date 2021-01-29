@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const auth = require('./middlewares/auth');
+const NotFoundError = require('./utils/errors/NotFoundError');
+const errorHandler = require('./middlewares/errorHandler');
 const { login, createUser } = require('./controllers/users');
 const userRouter = require('./routes/userRouter');
 const cardRouter = require('./routes/cardRouter');
@@ -23,9 +25,12 @@ app.post('/signin', login);
 app.post('/signup', createUser);
 app.use('/', auth, userRouter); // Роутинг пользователей
 app.use('/', auth, cardRouter); // Роутинг карточек
-app.use('*', (req, res) => { // Роутинг 404
-  res.status('404').json({ message: 'Запрашиваемый ресурс не найден' });
+app.use('*', () => { // Роутинг 404
+  throw new NotFoundError('Запрашиваемый ресурс не найден.');
 });
+
+// Обработка ошибок:
+app.use(errorHandler);
 
 // Run App:
 app.listen(PORT, () => {

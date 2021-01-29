@@ -1,41 +1,48 @@
 /* eslint-disable consistent-return */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const NotFoundError = require('../utils/errors/NotFoundError.js');
+const BadRequestError = require('../utils/errors/BadRequestError');
+const ConflictError = require('../utils/errors/ConflictError');
 const User = require('../models/user.js');
-const handleError = require('../utils/handleError');
 
 // GET Возвращает всех польователей
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
-    .orFail()
+    .orFail(() => {
+      throw new NotFoundError('Пользователи не найдены.');
+    })
     .then((users) => { res.status(200).send(users); })
-    .catch((err) => handleError(err, res, 'пользователя'));
+    .catch(next);
 };
 
 // GET Возвращает пользователя по _id
-const getUsersById = (req, res) => {
+const getUsersById = (req, res, next) => {
   let requestedId = req.params.id; // Запрашиваемый ID;
   if (requestedId === 'me') { // Возвращает информацию о текущем пользователе
     requestedId = req.user._id;
   }
 
   User.findById(requestedId)
-    .orFail()
+    .orFail((err) => {
+      console.log(err.name);
+      throw new NotFoundError('Не получилось найти нужного пользователя.');
+    })
     .then((user) => { res.status(200).send(user); })
-    .catch((err) => handleError(err, res, 'иъ с таким id. Возможно, его'));
+    .catch(next);
 };
 
 // GET Возвращает информацию о текущем пользователе
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   const requestedId = req.user.id; // Запрашиваемый ID;
   User.findById(requestedId)
     .orFail()
     .then((user) => { res.status(200).send(user); })
-    .catch((err) => handleError(err, res, 'вас с таким id. Возможно, его'));
+    .catch(next);
 };
 
 // POST Создаёт пользователя
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   // хешируем пароль
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
@@ -55,13 +62,19 @@ const createUser = (req, res) => {
       });
     })
     .catch((err) => {
-      res.status(400).send(err);
-    });
+      if (err.name === 'MongoError') {
+        // Если уже используется
+        throw new ConflictError('Данный email уже зарегистрирован.');
+      } else {
+        throw new BadRequestError('Не получилось зарегистрировать пользователя, проверьте переданные данные. ');
+      }
+    })
+    .catch(next);
 };
 
 // Получает из запроса почту и пароль и проверяет их.
 // Если почта и пароль правильные, контроллер создаёт JWT сроком на неделю.
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -75,29 +88,32 @@ const login = (req, res) => {
         .status(200)
         .send(token);
     })
-    .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
-    });
+    .catch(() => {
+      throw new BadRequestError('Неверный пароль или email');
+    })
+    .catch(next);
 };
 
 // PATCH Обновляет данные пользователя:
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
-    .orFail()
+    .orFail(() => {
+      throw new BadRequestError('Не получилось обновить данные пользователя, проверьте переданные данные.');
+    })
     .then((updatedUser) => res.send({ data: updatedUser }))
-    .catch((err) => handleError(err, res, 'пользователя'));
+    .catch(next);
 };
 
 // PATCH Обновляет аватар пользователя:
-const updateUserAvatar = (req, res) => {
+const updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
-    .orFail()
+    .orFail(() => {
+      throw new BadRequestError('Не получилось обновить данные пользователя, проверьте переданные данные.');
+    })
     .then((updatedUser) => res.send({ data: updatedUser }))
-    .catch((err) => handleError(err, res, 'пользователя'));
+    .catch(next);
 };
 
 module.exports = {

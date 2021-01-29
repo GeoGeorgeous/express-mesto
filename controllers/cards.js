@@ -1,20 +1,24 @@
 /* eslint-disable consistent-return */
 /* eslint-disable eqeqeq */
 const Card = require('../models/card.js');
-const handleError = require('../utils/handleError');
+const NotFoundError = require('../utils/errors/NotFoundError.js');
+const BadRequestError = require('../utils/errors/BadRequestError');
+const ForbiddenError = require('../utils/errors/ForbiddenError');
 
 // GET Возвращает все карточки
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   Card.find({})
-    .orFail()
+    .orFail(() => {
+      throw new NotFoundError('Карточки не найдены.');
+    })
     .then((cards) => {
       res.status(200).send(cards);
     })
-    .catch((err) => handleError(err, res, 'карточку'));
+    .catch(next);
 };
 
 // POST Создаёт карточку
-const createCard = (req, res) => {
+const createCard = (req, res, next) => {
   const {
     name, link, likes, createdAt,
   } = req.body;
@@ -22,12 +26,17 @@ const createCard = (req, res) => {
   Card.create({
     name, link, owner, likes, createdAt,
   })
-    .then((newCard) => res.status(200).send({ data: newCard }))
-    .catch((err) => handleError(err, res, 'карточку'));
+    .then((newCard) => res
+      .status(200)
+      .send({ data: newCard }))
+    .catch(() => {
+      throw new BadRequestError('Не получилось создать карточку, проверьте переданные данные.');
+    })
+    .catch(next);
 };
 
 // GET Удаляет карточку по id
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   const requestedId = req.params.id; // Запрашиваемый ID;
   Card.findById(requestedId)
     .then((requestedCard) => {
@@ -37,38 +46,42 @@ const deleteCard = (req, res) => {
         Card.findByIdAndRemove(requestedId) // Удаляем карточку
           .orFail()
           .then(() => res.send({ message: `Карточка ${requestedId} удалена` }))
-          .catch((err) => handleError(err, res, 'карточку. Возможно, её'));
+          .catch(next);
       } else {
-        return Promise.reject(new Error('Вы не можете удалять чужие карточки'));
+        throw new ForbiddenError('Вы не можете удалять чужие карточки.');
       }
     })
-    .catch((err) => handleError(err, res, 'карточку. Возможно, её'));
+    .catch(next);
 };
 
 // PUT Добавляет лайк карточке по идентификатору карточки
-const addLike = (req, res) => {
+const addLike = (req, res, next) => {
   const requestedId = req.params.id; // Запрашиваемый ID;
   Card.findByIdAndUpdate(
     requestedId,
     { $addToSet: { likes: req.user._id } },
     { new: true, runValidators: true },
   )
-    .orFail()
+    .orFail(() => {
+      throw new NotFoundError('Не получилось найти нужную карточку, проверьте идентификатор.');
+    })
     .then((updatedCard) => res.send({ data: updatedCard }))
-    .catch((err) => handleError(err, res, 'карточку. Возможно, её'));
+    .catch(next);
 };
 
 // DELETE Удаляет лайк карточки по идентификатору карточки
-const removeLike = (req, res) => {
+const removeLike = (req, res, next) => {
   const requestedId = req.params.id; // Запрашиваемый ID;
   Card.findByIdAndUpdate(
     requestedId,
     { $pull: { likes: req.user._id } },
     { new: true, runValidators: true },
   )
-    .orFail()
+    .orFail(() => {
+      throw new NotFoundError('Не получилось найти нужную карточку, проверьте идентификатор.');
+    })
     .then((updatedCard) => res.send({ data: updatedCard }))
-    .catch((err) => handleError(err, res, 'карточку. Возможно, её'));
+    .catch(next);
 };
 
 module.exports = {
