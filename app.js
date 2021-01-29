@@ -16,7 +16,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', { // Подключени�
   useUnifiedTopology: true,
 });
 
-app.use(bodyParser.json()); // JSON
+app.use(bodyParser.json()); // Парсер JSON
 
 // Роутинг:
 app.post('/signin', login);
