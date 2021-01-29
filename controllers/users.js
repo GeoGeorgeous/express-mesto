@@ -1,5 +1,6 @@
 /* eslint-disable consistent-return */
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user.js');
 const handleError = require('../utils/handleError');
 
@@ -52,9 +53,14 @@ const login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        'some-secret-key',
+        { expiresIn: '7d' },
+      );
       res
         .status(200)
-        .send(user);
+        .send(token);
     })
     .catch((err) => {
       res
