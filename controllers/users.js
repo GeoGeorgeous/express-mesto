@@ -24,8 +24,7 @@ const getUsersById = (req, res, next) => {
   }
 
   User.findById(requestedId)
-    .orFail((err) => {
-      console.log(err.name);
+    .orFail(() => {
       throw new NotFoundError('Не получилось найти нужного пользователя.');
     })
     .then((user) => { res.status(200).send(user); })
@@ -76,7 +75,6 @@ const createUser = (req, res, next) => {
 // Если почта и пароль правильные, контроллер создаёт JWT сроком на неделю.
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign(
@@ -86,7 +84,7 @@ const login = (req, res, next) => {
       );
       res
         .status(200)
-        .send(token);
+        .send({ token });
     })
     .catch(() => {
       throw new BadRequestError('Неверный пароль или email');

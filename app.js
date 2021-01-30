@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const cors = require('cors');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./utils/errors/NotFoundError');
 const errorHandler = require('./middlewares/errorHandler');
@@ -20,8 +21,13 @@ mongoose.connect('mongodb://localhost:27017/mestodb', { // Подключени�
   useUnifiedTopology: true,
 });
 
-app.use(bodyParser.json()); // Парсер JSON
-app.use(requestLogger);
+// Милдверы:
+app.use(cors()); // CORS
+app.use(bodyParser.urlencoded({ // Парсер
+  extended: true,
+}));
+app.use(bodyParser.json()); // Парсер
+app.use(requestLogger); // Логгер
 
 // Роутинг:
 app.post('/signin', login);

@@ -8,9 +8,10 @@ const ForbiddenError = require('../utils/errors/ForbiddenError');
 // GET Возвращает все карточки
 const getCards = (req, res, next) => {
   Card.find({})
-    .orFail(() => {
-      throw new NotFoundError('Карточки не найдены.');
-    })
+    .populate('likes', '_id')
+    // .orFail(() => {
+    //   throw new NotFoundError('Карточки не найдены.');
+    // })
     .then((cards) => {
       res.status(200).send(cards);
     })
