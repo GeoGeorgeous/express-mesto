@@ -7,18 +7,9 @@ const regex = require('../utils/regExp');
 
 userRouter.get('/', getUsers); // Возвращает всех польователей
 userRouter.get('/me', getCurrentUser); // Возвращает информацию о текущем пользователе
-userRouter.get('/:id', celebrate({
-  params: Joi.object().keys({
-    id: Joi
-      .string()
-      .alphanum()
-      .hex()
-      .length(24),
-  }),
-}), getUsersById); // Возвращает пользователя по _id
 
 // Обновляет профиль
-userRouter.patch('/users/me', celebrate({
+userRouter.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi
       .string()
@@ -32,6 +23,16 @@ userRouter.patch('/users/me', celebrate({
       .max(30),
   }).unknown(true),
 }), updateUser);
+
+userRouter.get('/:id', celebrate({
+  params: Joi.object().keys({
+    id: Joi
+      .string()
+      .alphanum()
+      .hex()
+      .length(24),
+  }),
+}), getUsersById); // Возвращает пользователя по _id
 
 // Обновляет аватар
 userRouter.patch('/me/avatar', celebrate({
