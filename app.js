@@ -31,6 +31,13 @@ app.use(bodyParser.urlencoded({ // Парсер
 app.use(bodyParser.json()); // Парсер
 app.use(requestLogger); // Логгер
 
+// crash-test <———————————————————————————————————————————————————————DELETE——>
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 // Роутинг:
 app.use('/', authRouter);
 app.use('/users', auth, userRouter); // Роутинг пользователей
