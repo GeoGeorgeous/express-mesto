@@ -33,7 +33,7 @@ const getUsersById = (req, res, next) => {
 
 // GET Возвращает информацию о текущем пользователе
 const getCurrentUser = (req, res, next) => {
-  const requestedId = req.user.id; // Запрашиваемый ID;
+  const requestedId = req.user._id; // Запрашиваемый ID;
   User.findById(requestedId)
     .orFail()
     .then((user) => { res.status(200).send(user); })

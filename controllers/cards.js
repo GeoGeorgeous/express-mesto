@@ -9,9 +9,6 @@ const ForbiddenError = require('../utils/errors/ForbiddenError');
 const getCards = (req, res, next) => {
   Card.find({})
     .populate('likes', '_id')
-    // .orFail(() => {
-    //   throw new NotFoundError('Карточки не найдены.');
-    // })
     .then((cards) => {
       res.status(200).send(cards);
     })
@@ -46,12 +43,13 @@ const deleteCard = (req, res, next) => {
       if (requestedCard.owner == req.user._id) {
         Card.findByIdAndRemove(requestedId) // Удаляем карточку
           .orFail()
-          .then(() => res.send({ message: `Карточка ${requestedId} удалена` }))
+          .then(() => res.send({ message: `Карточка ${requestedId} успешно удалена.` }))
           .catch(next);
       } else {
         throw new ForbiddenError('Вы не можете удалять чужие карточки.');
       }
     })
+    .catch(() => { throw new NotFoundError('Не получилось найти нужную карточку, проверьте идентификатор.'); })
     .catch(next);
 };
 

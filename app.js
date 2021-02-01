@@ -1,13 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { errors } = require('celebrate');
+// const { errors } = require('celebrate'); <- Включить для проверки ошибок JOI / Celebrate
 const cors = require('cors');
 const auth = require('./middlewares/auth');
 const NotFoundError = require('./utils/errors/NotFoundError');
 const errorHandler = require('./middlewares/errorHandler');
-const { login, createUser } = require('./controllers/users');
+// const { login, createUser } = require('./controllers/users');
+const celebrateErrorHandler = require('./middlewares/celebrateErrorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
 const cardRouter = require('./routes/cardRouter');
 
@@ -30,10 +32,9 @@ app.use(bodyParser.json()); // Парсер
 app.use(requestLogger); // Логгер
 
 // Роутинг:
-app.post('/signin', login);
-app.post('/signup', createUser);
-app.use('/', auth, userRouter); // Роутинг пользователей
-app.use('/', auth, cardRouter); // Роутинг карточек
+app.use('/', authRouter);
+app.use('/users', auth, userRouter); // Роутинг пользователей
+app.use('/cards', auth, cardRouter); // Роутинг карточек
 app.use('*', () => { // Роутинг 404
   throw new NotFoundError('Запрашиваемый ресурс не найден.');
 });
@@ -42,7 +43,8 @@ app.use('*', () => { // Роутинг 404
 app.use(errorLogger);
 
 // Обработка ошибок:
-app.use(errors());
+// app.use(errors()); <- Включить для проверки ошибок JOI / Celebrate
+app.use(celebrateErrorHandler);
 app.use(errorHandler);
 
 // Run App:
